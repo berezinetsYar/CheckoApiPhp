@@ -26,7 +26,7 @@ $requestUri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
 // Простой роутинг (аналог минимальных API - app.MapGet("/api/company", ...))
 // GET /index.php?inn=7707083893
-if ($httpMethod === 'GET' && str_ends_with($requestUri, '/index.php')) {
+if ($httpMethod === 'GET' && ($requestUri === '/index.php' || $requestUri === '/')) {
     
     // 5. Получаем параметр из query string (аналог [FromQuery] string inn)
     $inn = $_GET['inn'] ?? null;

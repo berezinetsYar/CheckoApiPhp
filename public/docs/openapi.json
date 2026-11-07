@@ -1,0 +1,108 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Checko Company API",
+    "version": "1.0.0",
+    "description": "REST API для получения основных данных о компании по ИНН через сервис Checko.\n\nРеализовано на чистом PHP с использованием ООП, строгой типизации и паттерна Dependency Injection."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080",
+      "description": "Локальный сервер разработки (PHP Built-in Server)"
+    }
+  ],
+  "paths": {
+    "/index.php": {
+      "get": {
+        "summary": "Получить информацию о компании",
+        "description": "Возвращает название, ОГРН, адрес, статус и руководителя компании по её ИНН.",
+        "tags": ["Companies"],
+        "parameters": [
+          {
+            "name": "inn",
+            "in": "query",
+            "required": true,
+            "description": "ИНН юридического лица (10 цифр) или индивидуального предпринимателя (12 цифр)",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{10}$|^\\d{12}$",
+              "example": "7707083893"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный запрос. Данные компании найдены.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "inn": { "type": "string", "example": "7707083893" },
+                        "name": { "type": "string", "example": "ПАО СБЕРБАНК" },
+                        "ogrn": { "type": "string", "example": "1027700132195" },
+                        "address": { "type": "string", "example": "117312, г. Москва, ул. Вавилова, д. 19" },
+                        "status": { "type": "string", "example": "Действует" },
+                        "director": { "type": "string", "example": "Греф Герман Оскарович" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Неверный запрос. Параметр INN отсутствует или имеет неверный формат.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "error": { "type": "string", "example": "Неверный формат ИНН. Ожидалось 10 или 12 цифр." }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Ошибка внешнего сервиса (Checko API). Например, неверный API-ключ или компания не найдена.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "error": { "type": "string", "example": "Ошибка внешнего сервиса" },
+                    "details": { "type": "string", "example": "API Checko вернул ошибку: Неверный ключ" }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Внутренняя ошибка сервера.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": false },
+                    "error": { "type": "string", "example": "Внутренняя ошибка сервера" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
