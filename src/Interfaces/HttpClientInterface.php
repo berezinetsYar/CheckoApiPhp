@@ -1,8 +1,7 @@
 <?php
-
-# Строгая типизация
 declare(strict_types=1);
-
+# Строгая типизация
+# 
 # Пространство имен
 namespace App\Interfaces;
 
