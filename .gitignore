@@ -1,0 +1,12 @@
+.env
+.env.*
+!.env.example
+var/log/
+*.log
+.DS_Store
+.idea/
+.vscode/
+public/openapi.json
+docker-data/
+*.bundle
+/nbproject/private/
